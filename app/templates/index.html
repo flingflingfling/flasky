@@ -1,17 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        {% if title %}
-        <title>{{title}} - microflasky
-        </title>
-        {%else%}
-        <title>Flasky!</title>
-        <{%endif%}>
 
-    </head>
+{% extends "base.html" %}
+
+
+    {% block title %}
+        Ding!
+    {% endblock %}
+    {% block head %}
+        {{ super() }}
+        <style>
+
+        </style>
+    {% endblock %}
+
+    {% block body %}
     <h1>You must be a talent genius,come on ,give them a nice shoot!</h1>
-    <p>XD</p>
-
+    <p>XD</p></br></br></br>
     <p>The local data and time is {{ moment(current_time).format('LLL') }}.</p>
     <p>That was {{ moment(current_time).fromNow(refresh=True)}}</p>
-</html>
+    {% endblock %}
