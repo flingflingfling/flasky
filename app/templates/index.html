@@ -1,20 +1,26 @@
-
 {% extends "base.html" %}
 
+{% import "bootstrap/wtf.html" as wtf %}
 
     {% block title %}
         Ding!
     {% endblock %}
-    {% block head %}
-        {{ super() }}
-        <style>
-
-        </style>
-    {% endblock %}
+{% block page_content %}
+<div class="page_conteng">
+    <h2>hello,  {% if name %}{{ name }}
+                {% else %}stranger
+                {% endif %}
+    </h2>
+</div>
+{{ wtf.quick_form(form) }}
+{% endblock %}
 
     {% block body %}
     <h1>You must be a talent genius,come on ,give them a nice shoot!</h1>
-    <p>XD</p></br></br></br>
+    <p>XD</p>
+    <br>
+    <br>
+    <br>
     <p>The local data and time is {{ moment(current_time).format('LLL') }}.</p>
-    <p>That was {{ moment(current_time).fromNow(refresh=True)}}</p>
+    <p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
     {% endblock %}
