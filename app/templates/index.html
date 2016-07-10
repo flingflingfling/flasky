@@ -6,11 +6,16 @@
         Ding!
     {% endblock %}
 {% block page_content %}
-<div class="page_conteng">
+<div class="page_header">
     <h2>hello,  {% if name %}{{ name }}
                 {% else %}stranger
-                {% endif %}
+                {% endif %}!
     </h2>
+    {% if not known %}
+    <p>Pleased to meet you!</p>
+    {% else %}
+    <p>happy to see you again!</p>
+    {% endif %}
 </div>
 {{ wtf.quick_form(form) }}
 {% endblock %}
