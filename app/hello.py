@@ -1,6 +1,6 @@
 # coding:utf-8
 
-import os.path
+import os
 from flask import Flask, render_template, session, \
     redirect, url_for, flash
 from flask_script import Manager, Shell     # add shell command support
@@ -14,7 +14,7 @@ from wtforms.validators import Required \
     # Required validata the data is not null
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand   # add db-migration support
-
+from flask_mail import Mail, Message
 
 
 
@@ -33,8 +33,23 @@ manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 migrate = Migrate(app, db)
+mail = Mail(app)
 
+# mail config
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USR_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')   # get mail username and pw
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')   # from envronment
+app.config['FLASKY_MAIL_SUBJECT_PREFX'] = '[Flasky]'
+app.config['FLASKY_MAIL_SENDER'] = 'Flasky Admin <flask@flingfling.io>'
 
+def send_email(to, subject, template, **kwargs):
+    msg = Message(app.config['FLASK_MAILSUBJECT_PREFIX']) + subject,
+                    sender=app.config['FLASKY_MAIL_SENDER'], recipients=[to]
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
+    mail.send(msg)
 
 class Role(db.Model):
     __tablename__ = 'roles'
