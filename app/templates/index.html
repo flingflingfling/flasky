@@ -1,31 +1,16 @@
 {% extends "base.html" %}
 
-{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}FLasky{% endblock %}
 
-    {% block title %}
-        Ding!
-    {% endblock %}
 {% block page_content %}
-<div class="page_header">
-    <h2>hello,  {% if name %}{{ name }}
-                {% else %}stranger
-                {% endif %}!
-    </h2>
-    {% if not known %}
-    <p>Pleased to meet you!</p>
-    {% else %}
-    <p>happy to see you again!</p>
-    {% endif %}
+<div class="page-header">
+    <h1>
+        Hello,
+        {% if current_user.is_authenticated %}{{ current_user.username }}
+        {% else %}
+        Stranger
+        {% endif %}
+        !
+    </h1>
 </div>
-{{ wtf.quick_form(form) }}
 {% endblock %}
-
-    {% block body %}
-    <h1>You must be a talent genius,come on ,give them a nice shoot!</h1>
-    <p>XD</p>
-    <br>
-    <br>
-    <br>
-    <p>The local data and time is {{ moment(current_time).format('LLL') }}.</p>
-    <p>That was {{ moment(current_time).fromNow(refresh=True) }}.</p>
-    {% endblock %}

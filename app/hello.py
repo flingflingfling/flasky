@@ -35,14 +35,14 @@ moment = Moment(app)
 migrate = Migrate(app, db)
 mail = Mail(app)
 
-# mail config
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USR_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')   # get mail username and pw
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')   # from envronment
-app.config['FLASKY_MAIL_SUBJECT_PREFX'] = '[Flasky]'
-app.config['FLASKY_MAIL_SENDER'] = 'Flasky Admin <flask@flingfling.io>'
+# # mail config
+# app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+# app.config['MAIL_PORT'] = 587
+# app.config['MAIL_USR_TLS'] = True
+# app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')   # get mail username and pw
+# app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')   # from envronment
+# app.config['FLASKY_MAIL_SUBJECT_PREFX'] = '[Flasky]'
+# app.config['FLASKY_MAIL_SENDER'] = 'Flasky Admin <flask@flingfling.io>'
 
 def send_email(to, subject, template, **kwargs):
     msg = Message(app.config['FLASK_MAILSUBJECT_PREFIX']) + subject,
@@ -51,37 +51,23 @@ def send_email(to, subject, template, **kwargs):
     msg.html = render_template(template + '.html', **kwargs)
     mail.send(msg)
 
-class Role(db.Model):
-    __tablename__ = 'roles'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
-    users = db.relationship('User', backref='role',lazy='dynamic')
-    def __repr__(self):
-        return '<Role %r>' % self.name
-
-
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, index=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-
-    def __repr__(self):
-        return '<User %r>' % self.username
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# class Role(db.Model):
+#     __tablename__ = 'roles'
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(64), unique=True)
+#     users = db.relationship('User', backref='role',lazy='dynamic')
+#     def __repr__(self):
+#         return '<Role %r>' % self.name
+#
+#
+# class User(db.Model):
+#     __tablename__ = 'users'
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(64), unique=True, index=True)
+#     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+#
+#     def __repr__(self):
+#         return '<User %r>' % self.username
 
 
 # view function
@@ -110,21 +96,21 @@ def user(name):
     return render_template('user.html', name=name)
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     return render_template('404.html'), 404
+#
+#
+# @app.errorhandler(500)
+# def internal_server_error(e):
+#     return render_template('500.html'), 500
 
 
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('500.html'), 500
-
-
-class NameForm(Form):
-    # name 是一个文本字段 变量,具体表示为type='text'的<input>元素
-    name = StringField('What is your name?', validators=[Required()])
-    # SubmitField is > type="submit"的,<input>元素
-    submit = SubmitField('Submit')
+# class NameForm(Form):
+#     # name 是一个文本字段 变量,具体表示为type='text'的<input>元素
+#     name = StringField('What is your name?', validators=[Required()])
+#     # SubmitField is > type="submit"的,<input>元素
+#     submit = SubmitField('Submit')
 
 def make_shell_context():
     return dict(app=app, db=db, User=User, Role=Role)
