@@ -12,10 +12,17 @@ This project will use flask_script to support alembic.
 
 alembic could make the database become easy to migration.
 
-###the code like that:
->python hello.py db migrate -m "initial migration"
+###the code likes that:
+>python manage.py db init  >>initialize the migration
 
-upgrade command:
+create database 
+>python manage.py shell
+> '>>>from app import db
+> '>>>db.create_all()
+> '>>>exit
+>python manage.py upgrade
+
+upgrade command:    # create tables or upgrade to the latest .
 >python hello.py db upgrade
 
 downgrade command:

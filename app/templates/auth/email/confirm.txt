@@ -1,0 +1,12 @@
+Dear {{ user.username }}
+
+Welcome to flasky demo blog~
+
+please ocnfirm the url link below to complete the email, XD
+
+{{ url_for('auth.confirm', token=token, _external=True) }}
+
+Sincerely,
+
+Have a good time~
+

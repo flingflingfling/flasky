@@ -1,15 +1,18 @@
-#coding:utf8
-#!/usr/bin/python2
+# coding:utf8
+# !/usr/bin/python2
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin   # remember the status of user login in info
+from flask_login import UserMixin  # remember the status of user login in info
 from . import login_manager
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
+from . import db
 
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    users = db.relationship('User', backref='role',lazy='dynamic')
+    users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __repr__(self):
         return '<Role %r>' % self.name
@@ -20,25 +23,41 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    password_hasn = db.Column(db.String(128))
+    password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    confirmed = db.Column(db.Boolean, default=False)
 
+    @property
+    def password(self):  # password could not take back with a original status
+        raise AttributeError('password is not readable attribute')
+
+    @password.setter
+    def password(self, password):  # generate the hash of the password
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):  # check hash
+        return check_password_hash(self.password_hash, password)
+
+    def generate_confirmation_token(self, expiretion=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiretion)
+        return s.dumps({'confirm':self.id})
+
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
 
     def __repr__(self):
         return '<User %r>' % self.username
 
-    @property
-    def password(self): # password could not take back with a original status
-        raise AttributeError('password is not readable attribute')
-
-    @password.setter
-    def password(self, password):   # generate the hash of the password
-        self.password_hash = generate_password_hash(password)
-
-    def verify_password(self, password):    # check hash
-        return check_password_hash(self.password_hash, password)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id)) # if user id could find,return true.
-
+    return User.query.get(int(user_id))  # if user id could find,return true.

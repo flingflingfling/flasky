@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Flasky- Confirm your account~{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>
+        Hello, {{ current_user.username }}!
+    </h1>
+    <h2>
+        You have not confirmed your account yet.
+    </h2>
+    <p>
+        Before you access the site, you need to confirm your email!
+    </p>
+    <p>
+        Need another confirmation email?
+        <a href="{{ url_for('auth.resend_confirmation') }}"click here~!</a>
+    </p>
+    <p>快来加入吧！</p>
+
+</div>
+{% endblock %}
