@@ -28,4 +28,9 @@ upgrade command:    # create tables or upgrade to the latest .
 downgrade command:
 >python hello.py db downgrade 
 
+##about permission
+put the roles into db
+>python manage.py shell
+>>>Role.insert_roles()
+>>>ROle.query.all()
 
