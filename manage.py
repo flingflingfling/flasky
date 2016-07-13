@@ -29,6 +29,20 @@ def test():  # you can use test command in the flask_script
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+@manager.command
+def deploy():
+    """Run deployment task."""
+    from flask_migrate import upgrade
+    from app.models import Role, User
+
+    upgrade()
+
+    # create new role
+    Role.insert_roles()
+
+    # let everybody follow the uper role
+    User.add_self_follows()
+
 
 if __name__ == '__main__':
-    manager.run()
+    manager.run(host=0.0.0.0)
