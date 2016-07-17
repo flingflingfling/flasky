@@ -1,8 +1,9 @@
-#conding:utf-8
+# conding:utf-8
 
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'do not you trust me '
@@ -21,21 +22,23 @@ class Config:
     def init_app(app):
         pass
 
+
 class DevelopmentConfig(Config):
     DEBUG = True
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'flasky-sqlalchemy-dev-sqlite3.sqlite')
+                              'sqlite:///' + os.path.join(basedir, 'flasky-sqlalchemy-dev-sqlite3.sqlite')
+
 
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+                              'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
 
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+                              'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 
     @classmethod
     def init_app(cls, app):
@@ -61,11 +64,9 @@ class ProductionConfig(Config):
         app.logger.addHandler(mail_handler)
 
 
-
 config = {
-'development': DevelopmentConfig,
-'testing': TestingConfig,
-'production': ProductionConfig,
-'default': DevelopmentConfig
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
 }
-

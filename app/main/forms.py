@@ -12,6 +12,7 @@ from wtforms.validators import Required, \
     Length, Email, Regexp
     # Required validata the data is not null
 from flask_pagedown.fields import PageDownField # support markdown
+from ..models import User, Role
 
 class NameForm(Form):
     # name 是一个文本字段 变量,具体表示为type='text'的<input>元素

@@ -163,7 +163,7 @@ class User(UserMixin, db.Model):
 
     def can(self, permissions):
         return self.role is not None and \
-               (self.role.permissions & permissions) == permissions
+               (self.role.permissions and permissions) == permissions
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
